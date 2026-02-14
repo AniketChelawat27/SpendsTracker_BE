@@ -6,6 +6,7 @@ const cors = require("cors");
 const admin = require("firebase-admin");
 const { connectDB } = require("./config/db");
 
+const authRoutes = require("./routes/auth");
 const dataRoutes = require("./routes/data");
 const salaryRoutes = require("./routes/salary");
 const expensesRoutes = require("./routes/expenses");
@@ -77,6 +78,7 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.use("/api/auth", authRoutes);
 app.use("/api/data", dataRoutes);
 app.use("/api/salary", salaryRoutes);
 app.use("/api/expenses", expensesRoutes);
