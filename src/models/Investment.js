@@ -15,6 +15,8 @@ const schema = new mongoose.Schema(
     year: { type: Number, required: true },
     returnPercent: { type: Number },
     notes: { type: String, default: "" },
+    // For type "Gold": price per gram (INR) at time of purchase – used for current valuation
+    pricePerGramAtPurchase: { type: Number },
   },
   { timestamps: true }
 );
