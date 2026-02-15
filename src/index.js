@@ -9,6 +9,9 @@ const { connectDB } = require("./config/db");
 const authRoutes = require("./routes/auth");
 const dataRoutes = require("./routes/data");
 const salaryRoutes = require("./routes/salary");
+const { requireAuth } = require("./middleware/auth");
+const Salary = require("./models/Salary");
+const { toJSON } = require("./utils/toJSON");
 const expensesRoutes = require("./routes/expenses");
 const investmentsRoutes = require("./routes/investments");
 const activitiesRoutes = require("./routes/activities");
@@ -79,8 +82,17 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
-app.use("/api/data", dataRoutes);
+app.post("/api/salaries", requireAuth, async (req, res) => {
+  try {
+    const doc = await Salary.create({ ...req.body, userId: req.uid });
+    res.status(201).json(toJSON(doc));
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
 app.use("/api/salary", salaryRoutes);
+app.use("/api/salaries", salaryRoutes);
+app.use("/api/data", dataRoutes);
 app.use("/api/expenses", expensesRoutes);
 app.use("/api/investments", investmentsRoutes);
 app.use("/api/activities", activitiesRoutes);
